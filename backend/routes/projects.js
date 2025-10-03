@@ -151,7 +151,7 @@ router.post('/', authenticateToken, requireAdmin, upload.single('image'), async 
 
     // Parse form fields from req.body (multer populates this for non-file fields)
     Object.keys(req.body).forEach(key => {
-      if (req.body[key] !== undefined) {
+      if (req.body[key] !== undefined && !(key === 'image' && typeof req.body[key] === 'object' && !Array.isArray(req.body[key]))) {
         projectData[key] = req.body[key];
       }
     });
@@ -198,7 +198,7 @@ router.put('/:id', authenticateToken, requireAdmin, upload.single('image'), asyn
 
     // Parse form fields from req.body (multer populates this for non-file fields)
     Object.keys(req.body).forEach(key => {
-      if (req.body[key] !== undefined) {
+      if (req.body[key] !== undefined && !(key === 'image' && typeof req.body[key] === 'object' && !Array.isArray(req.body[key]))) {
         projectData[key] = req.body[key];
       }
     });
