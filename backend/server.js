@@ -34,7 +34,8 @@ const allowedOrigins = process.env.NODE_ENV === 'production'
       'https://your-portfolio-git-main.vercel.app',
       'https://your-portfolio-git-develop.vercel.app',
       'https://portfolio-ihg9ftgl3-mohammad-fayazs-projects-12352e52.vercel.app',
-      'https://portfolio1234-lake.vercel.app'
+      'https://portfolio1234-lake.vercel.app',
+      'https://portfolio1234-8d6zo0arg-mohammad-fayazs-projects-12352e52.vercel.app'
     ]
   : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:3000', 'http://localhost:3001'];
 
