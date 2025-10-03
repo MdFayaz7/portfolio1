@@ -233,7 +233,7 @@ const AdminDashboard: React.FC = () => {
       });
 
       // Append image file
-      if (formData.image) {
+      if (formData.image && formData.image instanceof File) {
         formDataToSend.append('image', formData.image);
       }
 
