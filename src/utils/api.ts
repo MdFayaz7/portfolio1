@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 
 // Ensure consistent API base and compute origin for assets (uploads)
-const RAW_API_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:5000/api';
+const RAW_API_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:5001/api';
 const API_BASE_URL = RAW_API_URL.replace(/\/$/, '');
 const API_ORIGIN = API_BASE_URL.replace(/\/api$/, '');
 

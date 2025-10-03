@@ -187,11 +187,30 @@ router.post('/', authenticateToken, requireAdmin, upload.single('image'), async 
 });
 
 // Update project (admin only)
-router.put('/:id', authenticateToken, requireAdmin, async (req, res) => {
+router.put('/:id', authenticateToken, requireAdmin, upload.single('image'), async (req, res) => {
   try {
+    const projectData = {};
+
+    // Handle file upload
+    if (req.file) {
+      projectData.image = `/uploads/${req.file.filename}`;
+    }
+
+    // Parse form fields from req.body (multer populates this for non-file fields)
+    Object.keys(req.body).forEach(key => {
+      if (req.body[key] !== undefined) {
+        projectData[key] = req.body[key];
+      }
+    });
+
+    // Parse technologies if it's a string
+    if (projectData.technologies && typeof projectData.technologies === 'string') {
+      projectData.technologies = projectData.technologies.split(',').map(tech => tech.trim());
+    }
+
     const project = await Project.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      projectData,
       { new: true, runValidators: true }
     );
 
