@@ -24,6 +24,9 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5001;
 
+// Trust proxy for rate limiting behind reverse proxy (like Render)
+app.set('trust proxy', 1);
+
 // Security middleware
 app.use(helmet());
 
