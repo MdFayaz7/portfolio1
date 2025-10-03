@@ -222,6 +222,11 @@ const AdminDashboard: React.FC = () => {
   };
 
   const handleAddProject = async () => {
+    if (!formData.title || !formData.description || !formData.image || !(formData.image instanceof File)) {
+      toast.error('Please fill all required fields and select an image file');
+      return;
+    }
+
     try {
       const formDataToSend = new FormData();
 
