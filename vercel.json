@@ -14,8 +14,6 @@
       "dest": "/index.html"
     }
   ],
-  "env": {
-    "VITE_API_URL": "@vite_api_url",
-    "VITE_APP_NAME": "@vite_app_name"
-  }
+  
 }
+
