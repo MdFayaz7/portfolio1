@@ -91,8 +91,16 @@ export const projectsAPI = {
   getProjects: () => api.get('/projects'),
   getFeaturedProjects: () => api.get('/projects?featured=true'),
   getProject: (id: string) => api.get(`/projects/${id}`),
-  createProject: (data: any) => api.post('/projects', data),
-  updateProject: (id: string, data: any) => api.put(`/projects/${id}`, data),
+  createProject: (data: FormData) =>
+    api.post('/projects', data, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }),
+  updateProject: (id: string, data: any) =>
+    data instanceof FormData
+      ? api.put(`/projects/${id}`, data, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
+      : api.put(`/projects/${id}`, data),
   deleteProject: (id: string) => api.delete(`/projects/${id}`),
   toggleFeatured: (id: string) => api.patch(`/projects/${id}/featured`),
 };
