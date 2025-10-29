@@ -8,7 +8,16 @@ const API_ORIGIN = API_BASE_URL.replace(/\/api$/, '');
 export const assetUrl = (path: string): string => {
   if (!path) return '';
   if (path.startsWith('http://') || path.startsWith('https://')) return path;
-  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  // Ensure uploads are correctly prefixed even if DB stored just the filename
+  let fixedPath = path;
+  const isBareFilename = !path.includes('/') && /\.(png|jpe?g|gif|webp|svg|pdf)$/i.test(path);
+  if (isBareFilename) {
+    fixedPath = `uploads/${path}`;
+  }
+  if (!fixedPath.startsWith('/')) {
+    fixedPath = `/${fixedPath}`;
+  }
+  const normalizedPath = fixedPath;
   return `${API_ORIGIN}${normalizedPath}`;
 };
 
