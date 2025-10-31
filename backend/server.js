@@ -59,6 +59,19 @@ app.use('/uploads', (req, res, next) => {
   next();
 }, express.static(path.join(__dirname, 'uploads')));
 
+// Fallback for missing upload files: return a neutral SVG placeholder instead of 404
+app.get('/uploads/*', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  res.type('image/svg+xml').status(200).send(
+    `<?xml version="1.0" encoding="UTF-8"?>
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="500">
+      <rect width="100%" height="100%" fill="#111111"/>
+      <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#AAAAAA" font-size="28" font-family="Arial, Helvetica, sans-serif">Project Image</text>
+    </svg>`
+  );
+});
+
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/portfolio_db', {
   useNewUrlParser: true,

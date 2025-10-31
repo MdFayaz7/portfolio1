@@ -76,8 +76,8 @@ const About: React.FC = () => {
     );
   }
 
-  const defaultAboutText = "I am a passionate full-stack developer with expertise in modern web technologies. I love creating innovative solutions and bringing ideas to life through clean, efficient code.";
-  const defaultBio = "With a strong foundation in both frontend and backend development, I specialize in building scalable web applications using technologies like React, Node.js, and MongoDB. I'm constantly learning and staying up-to-date with the latest industry trends.";
+  const defaultAboutText = "I am a passionate full-stack developer with expertise in modern web technologies.";
+  const defaultBio = "";
 
   const passages = [profile?.aboutText || defaultAboutText, profile?.cvText || defaultBio];
 
