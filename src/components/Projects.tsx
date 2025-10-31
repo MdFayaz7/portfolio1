@@ -49,13 +49,13 @@ const Projects: React.FC = () => {
 
   if (loading) {
     return (
-      <section id="projects" className="py-20 bg-white">
+      <section id="projects" className="py-20 bg-black">
         <div className="container mx-auto px-4">
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-300 rounded w-48 mx-auto mb-8"></div>
+            <div className="h-8 bg-gray-700 rounded w-48 mx-auto mb-8"></div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[0, 1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="h-80 bg-gray-300 rounded-lg"></div>
+                <div key={i} className="h-80 bg-gray-800 rounded-lg"></div>
               ))}
             </div>
           </div>
@@ -65,7 +65,7 @@ const Projects: React.FC = () => {
   }
 
   return (
-    <section id="projects" className="py-20 bg-white" ref={ref}>
+    <section id="projects" className="py-20 bg-black" ref={ref}>
       <div className="container mx-auto px-4">
           <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -73,22 +73,22 @@ const Projects: React.FC = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-            My <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Projects</span>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            My <span className="bg-gradient-to-r from-violet-600 to-green-500 bg-clip-text text-transparent">Projects</span>
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto mb-6"></div>
-          <p className="text-gray-600 text-lg">
+          <div className="w-24 h-1 bg-gradient-to-r from-violet-600 to-green-500 mx-auto mb-6"></div>
+          <p className="text-gray-300 text-lg">
             Some of my recent work and projects
           </p>
         </motion.div>
 
         {projects.length === 0 ? (
           <div className="text-center py-12">
-            <div className="text-gray-400 mb-4">
+            <div className="text-gray-500 mb-4">
               <Code size={64} className="mx-auto" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-600 mb-2">No projects added yet</h3>
-            <p className="text-gray-500">
+            <h3 className="text-xl font-semibold text-gray-300 mb-2">No projects added yet</h3>
+            <p className="text-gray-400">
               Projects will be displayed here once added.
             </p>
           </div>
@@ -109,15 +109,15 @@ const Projects: React.FC = () => {
                     onClick={() => setActiveFilter(filter)}
                     className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
                       activeFilter === filter
-                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg transform scale-105'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-md'
+                        ? 'bg-gradient-to-r from-violet-600 to-green-500 text-white shadow-lg transform scale-105'
+                        : 'bg-gray-800 text-gray-200 hover:bg-gray-700 hover:shadow-md'
                     }`}
                   >
                     <div className="flex items-center space-x-2">
                       <span className="capitalize">{filter.replace('-', ' ')}</span>
                       {filterCount > 0 && (
                         <span className={`px-2 py-1 rounded-full text-xs ${
-                          activeFilter === filter ? 'bg-white/20' : 'bg-gray-300'
+                          activeFilter === filter ? 'bg-white/20' : 'bg-gray-700'
                         }`}>
                           {filterCount}
                         </span>
@@ -142,18 +142,18 @@ const Projects: React.FC = () => {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 group"
+                  className="bg-gray-900 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 group"
                 >
                   {/* Project Image */}
                   <div className="relative overflow-hidden">
                     <img
                       src={assetUrl(project.image)}
                       alt={project.title}
-                      className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="w-full h-56 md:h-64 lg:h-72 object-cover object-center group-hover:scale-110 transition-transform duration-500"
                     />
                     
                     {/* Overlay */}
-                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                       <div className="flex space-x-4">
                         {project.demoUrl && (
                           <motion.a
@@ -161,7 +161,7 @@ const Projects: React.FC = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                             whileHover={{ scale: 1.1 }}
-                            className="bg-white text-gray-800 p-3 rounded-full hover:bg-blue-600 hover:text-white transition-colors duration-300"
+                            className="bg-white text-gray-800 p-3 rounded-full hover:bg-violet-600 hover:text-white transition-colors duration-300"
                             aria-label="Live URL"
                           >
                             <ExternalLink size={20} />
@@ -194,17 +194,17 @@ const Projects: React.FC = () => {
                   <div className="p-6">
                     {/* Title and Category */}
                     <div className="mb-4">
-                      <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">
+                      <h3 className="text-xl font-bold text-white mb-2 group-hover:text-violet-400 transition-colors">
                         {project.title}
                       </h3>
-                      <div className="flex items-center space-x-2 text-sm text-gray-500">
+                      <div className="flex items-center space-x-2 text-sm text-gray-400">
                         <Tag size={16} />
                         <span>{project.category}</span>
                       </div>
                     </div>
 
                     {/* Description */}
-                    <p className="text-gray-600 mb-4 leading-relaxed">
+                    <p className="text-gray-300 mb-4 leading-relaxed">
                       {truncateText(project.description, 100)}
                     </p>
 
@@ -228,7 +228,7 @@ const Projects: React.FC = () => {
                     </div>
 
                     {/* Status and Date */}
-                    <div className="flex items-center justify-between text-sm text-gray-500">
+                    <div className="flex items-center justify-between text-sm text-gray-400">
                       <div className="flex items-center space-x-2">
                         <Calendar size={16} />
                         <span>
@@ -238,10 +238,10 @@ const Projects: React.FC = () => {
                       
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                         project.status === 'Completed' 
-                          ? 'bg-green-100 text-green-800'
+                          ? 'bg-green-900 text-green-200'
                           : project.status === 'In Progress'
-                          ? 'bg-blue-100 text-blue-800'
-                          : 'bg-yellow-100 text-yellow-800'
+                          ? 'bg-violet-900 text-violet-200'
+                          : 'bg-yellow-900 text-yellow-200'
                       }`}>
                         {project.status}
                       </span>
@@ -255,7 +255,7 @@ const Projects: React.FC = () => {
                         rel="noopener noreferrer"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-center py-2 px-4 rounded-lg font-medium hover:shadow-lg transition-shadow duration-300 flex items-center justify-center space-x-2"
+                        className="flex-1 bg-gradient-to-r from-violet-600 to-green-500 text-white text-center py-2 px-4 rounded-lg font-medium hover:shadow-lg transition-shadow duration-300 flex items-center justify-center space-x-2"
                       >
                         <Eye size={16} />
                         <span>Live Project</span>

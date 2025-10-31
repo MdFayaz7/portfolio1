@@ -69,6 +69,17 @@ const About: React.FC = () => {
   const defaultAboutText = "I am a passionate full-stack developer with expertise in modern web technologies. I love creating innovative solutions and bringing ideas to life through clean, efficient code.";
   const defaultBio = "With a strong foundation in both frontend and backend development, I specialize in building scalable web applications using technologies like React, Node.js, and MongoDB. I'm constantly learning and staying up-to-date with the latest industry trends.";
 
+  // Rotate between two passages (admin-provided) every 5 seconds
+  const passages = [profile?.aboutText || defaultAboutText, profile?.cvText || defaultBio];
+  const [activePassageIndex, setActivePassageIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActivePassageIndex((prev) => (prev === 0 ? 1 : 0));
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section id="about" className="py-20 bg-black" ref={ref}>
       <div className="container mx-auto px-4">
@@ -79,9 +90,9 @@ const About: React.FC = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            About <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Me</span>
+            About <span className="bg-gradient-to-r from-violet-600 to-green-500 bg-clip-text text-transparent">Me</span>
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto"></div>
+          <div className="w-24 h-1 bg-gradient-to-r from-violet-600 to-green-500 mx-auto"></div>
         </motion.div>
 
         <div className="max-w-6xl mx-auto">
@@ -102,24 +113,24 @@ const About: React.FC = () => {
                     <img
                       src={assetUrl(profile.aboutImage)}
                       alt={profile.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover object-center"
                     />
                   ) : profile?.profilePicture ? (
                     <img
                       src={assetUrl(profile.profilePicture)}
                       alt={profile.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover object-center"
                     />
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white text-8xl font-bold">
+                    <div className="w-full h-full bg-gradient-to-r from-violet-600 to-green-500 flex items-center justify-center text-white text-8xl font-bold">
                       {profile?.name?.charAt(0) || 'U'}
                     </div>
                   )}
                 </div>
                 
                 {/* Decorative elements */}
-                <div className="absolute -top-4 -right-6 w-8 h-8 bg-blue-500 rounded-full animate-pulse"></div>
-                <div className="absolute -bottom-6 -left-4 w-6 h-6 bg-purple-500 rounded-full animate-pulse delay-1000"></div>
+                <div className="absolute -top-4 -right-6 w-8 h-8 bg-violet-600 rounded-full animate-pulse"></div>
+                <div className="absolute -bottom-6 -left-4 w-6 h-6 bg-green-500 rounded-full animate-pulse delay-1000"></div>
               </motion.div>
             </div>
 
@@ -134,40 +145,44 @@ const About: React.FC = () => {
                 <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
                   {profile?.name || 'Your Name'}
                 </h3>
-                <h4 className="text-xl text-blue-400 mb-6">
+                <h4 className="text-xl text-violet-300 mb-6">
                   {profile?.title || 'Full Stack Developer'}
                 </h4>
               </div>
 
-              <div className="prose prose-lg text-gray-300 leading-relaxed">
-                <p className="mb-4">
-                  {profile?.aboutText || defaultAboutText}
-                </p>
-                <p className="mb-6">
-                  {profile?.cvText || defaultBio}
-                </p>
+              <div className="prose prose-lg text-gray-300 leading-relaxed min-h-[8rem]">
+                <motion.div
+                  key={activePassageIndex}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.5 }}
+                  className="mb-6"
+                >
+                  {passages[activePassageIndex]}
+                </motion.div>
               </div>
 
               {/* Contact Info */}
               <div className="space-y-3">
                 {profile?.location && (
                   <div className="flex items-center space-x-3 text-gray-300">
-                    <MapPin className="text-blue-400" size={20} />
+                    <MapPin className="text-violet-300" size={20} />
                     <span>{profile.location}</span>
                   </div>
                 )}
                 {profile?.email && (
                   <div className="flex items-center space-x-3 text-gray-300">
-                    <Mail className="text-blue-400" size={20} />
-                    <a href={`mailto:${profile.email}`} className="hover:text-blue-400 transition-colors">
+                    <Mail className="text-violet-300" size={20} />
+                    <a href={`mailto:${profile.email}`} className="hover:text-violet-300 transition-colors">
                       {profile.email}
                     </a>
                   </div>
                 )}
                 {profile?.phone && (
                   <div className="flex items-center space-x-3 text-gray-300">
-                    <Phone className="text-blue-400" size={20} />
-                    <a href={`tel:${profile.phone}`} className="hover:text-blue-400 transition-colors">
+                    <Phone className="text-violet-300" size={20} />
+                    <a href={`tel:${profile.phone}`} className="hover:text-violet-300 transition-colors">
                       {profile.phone}
                     </a>
                   </div>
@@ -179,7 +194,7 @@ const About: React.FC = () => {
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleDownloadResume}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full font-semibold flex items-center space-x-2 shadow-lg hover:shadow-xl transition-shadow duration-300"
+                className="bg-gradient-to-r from-violet-600 to-green-500 text-white px-6 py-3 rounded-full font-semibold flex items-center space-x-2 shadow-lg hover:shadow-xl transition-shadow duration-300"
               >
                 <Download size={20} />
                 <span>Download Resume</span>

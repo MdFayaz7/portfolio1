@@ -104,13 +104,13 @@ const Home: React.FC = () => {
                   <img
                     src={assetUrl(profile.homeImage)}
                     alt={profile.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-center"
                   />
                 ) : profile?.profilePicture ? (
                   <img
                     src={assetUrl(profile.profilePicture)}
                     alt={profile.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-center"
                   />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center text-white text-6xl font-bold">
