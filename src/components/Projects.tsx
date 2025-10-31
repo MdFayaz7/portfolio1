@@ -149,7 +149,13 @@ const Projects: React.FC = () => {
                     <img
                       src={assetUrl(project.image)}
                       alt={project.title}
+                      loading="lazy"
                       className="w-full h-56 md:h-64 lg:h-72 object-cover object-center group-hover:scale-110 transition-transform duration-500"
+                      onError={(e) => {
+                        const target = e.currentTarget as HTMLImageElement;
+                        if (target.src.includes('placeholder.co')) return;
+                        target.src = 'https://placehold.co/800x500/111111/AAAAAA?text=Project+Image';
+                      }}
                     />
                     
                     {/* Overlay */}
