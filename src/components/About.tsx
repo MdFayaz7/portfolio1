@@ -13,6 +13,16 @@ const About: React.FC = () => {
     threshold: 0.1,
   });
 
+  // Rotate between two passages (admin-provided) every 5 seconds
+  const [activePassageIndex, setActivePassageIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActivePassageIndex((prev) => (prev === 0 ? 1 : 0));
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -69,16 +79,7 @@ const About: React.FC = () => {
   const defaultAboutText = "I am a passionate full-stack developer with expertise in modern web technologies. I love creating innovative solutions and bringing ideas to life through clean, efficient code.";
   const defaultBio = "With a strong foundation in both frontend and backend development, I specialize in building scalable web applications using technologies like React, Node.js, and MongoDB. I'm constantly learning and staying up-to-date with the latest industry trends.";
 
-  // Rotate between two passages (admin-provided) every 5 seconds
   const passages = [profile?.aboutText || defaultAboutText, profile?.cvText || defaultBio];
-  const [activePassageIndex, setActivePassageIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActivePassageIndex((prev) => (prev === 0 ? 1 : 0));
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <section id="about" className="py-20 bg-black" ref={ref}>
