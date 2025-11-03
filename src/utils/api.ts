@@ -8,18 +8,28 @@ const API_ORIGIN = API_BASE_URL.replace(/\/api$/, '');
 
 export const assetUrl = (path: string): string => {
   if (!path) return '';
-  if (path.startsWith('http://') || path.startsWith('https://')) return path;
-  // Ensure uploads are correctly prefixed even if DB stored just the filename
-  let fixedPath = path;
-  const isBareFilename = !path.includes('/') && /\.(png|jpe?g|gif|webp|svg|pdf)$/i.test(path);
+  const raw = String(path).trim();
+  if (raw.startsWith('http://') || raw.startsWith('https://')) return raw;
+  
+  // Normalize Windows backslashes and stray API prefixes
+  let fixedPath = raw.replace(/\\/g, '/');
+  fixedPath = fixedPath.replace(/^\/?api\//i, '/');
+
+  // If only a bare filename came through, prefix with uploads/
+  const isBareFilename = !fixedPath.includes('/') && /\.(png|jpe?g|gif|webp|svg|pdf)$/i.test(fixedPath);
   if (isBareFilename) {
-    fixedPath = `uploads/${path}`;
+    fixedPath = `uploads/${fixedPath}`;
   }
+
+  // Ensure it starts with a single leading slash
   if (!fixedPath.startsWith('/')) {
     fixedPath = `/${fixedPath}`;
   }
-  const normalizedPath = fixedPath;
-  return `${API_ORIGIN}${normalizedPath}`;
+
+  // Collapse duplicate slashes
+  fixedPath = fixedPath.replace(/\/+/g, '/');
+
+  return `${API_ORIGIN}${fixedPath}`;
 };
 
 // Create axios instance
@@ -155,3 +165,4 @@ export const uploadAPI = {
 };
 
 export default api;
+
