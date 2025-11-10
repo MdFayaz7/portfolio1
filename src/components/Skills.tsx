@@ -247,7 +247,10 @@ const Skills: React.FC = () => {
                       )}
                     </div>
 
-                    {/* Name and proficiency removed to show icons only */}
+                    {/* Skill Name */}
+                    <div className="mt-1">
+                      <p className="text-white font-medium">{skill.name}</p>
+                    </div>
 
                     {/* Description */}
                     {skill.description && (
@@ -306,6 +309,7 @@ const Skills: React.FC = () => {
                         );
                       })()
                     )}
+                    <div className="text-gray-200 text-sm">{skill.name}</div>
                   </motion.div>
                 ))}
               </div>
