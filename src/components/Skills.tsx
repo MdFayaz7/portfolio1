@@ -5,6 +5,79 @@ import { Skill } from '../types';
 import { skillsAPI } from '../utils/api';
 import { useInView } from 'react-intersection-observer';
 
+// Map common skill names to Devicon classes
+const getDeviconClass = (name: string): string | null => {
+  const key = name.trim().toLowerCase();
+  const map: Record<string, string> = {
+    // Languages
+    'java': 'devicon-java-plain colored',
+    'javascript': 'devicon-javascript-plain colored',
+    'typescript': 'devicon-typescript-plain colored',
+    'python': 'devicon-python-plain colored',
+    'c': 'devicon-c-plain colored',
+    'c++': 'devicon-cplusplus-plain colored',
+    'c#': 'devicon-csharp-plain colored',
+    'go': 'devicon-go-plain colored',
+    'golang': 'devicon-go-plain colored',
+    'php': 'devicon-php-plain colored',
+    'ruby': 'devicon-ruby-plain colored',
+    'kotlin': 'devicon-kotlin-plain colored',
+    'swift': 'devicon-swift-plain colored',
+    
+    // Frontend
+    'html': 'devicon-html5-plain colored',
+    'html5': 'devicon-html5-plain colored',
+    'css': 'devicon-css3-plain colored',
+    'css3': 'devicon-css3-plain colored',
+    'sass': 'devicon-sass-original colored',
+    'scss': 'devicon-sass-original colored',
+    'tailwind': 'devicon-tailwindcss-plain colored',
+    'tailwindcss': 'devicon-tailwindcss-plain colored',
+    'react': 'devicon-react-original colored',
+    'next': 'devicon-nextjs-original-wordmark',
+    'next.js': 'devicon-nextjs-original-wordmark',
+    'redux': 'devicon-redux-original colored',
+    'vite': 'devicon-vitejs-plain colored',
+    
+    // Backend
+    'node': 'devicon-nodejs-plain colored',
+    'nodejs': 'devicon-nodejs-plain colored',
+    'node.js': 'devicon-nodejs-plain colored',
+    'express': 'devicon-express-original',
+    'express.js': 'devicon-express-original',
+    'nestjs': 'devicon-nestjs-plain colored',
+    'spring': 'devicon-spring-original colored',
+    'spring boot': 'devicon-spring-original colored',
+    
+    // Databases
+    'mongodb': 'devicon-mongodb-plain colored',
+    'mysql': 'devicon-mysql-plain colored',
+    'postgres': 'devicon-postgresql-plain colored',
+    'postgresql': 'devicon-postgresql-plain colored',
+    'redis': 'devicon-redis-plain colored',
+    
+    // DevOps / Tools
+    'git': 'devicon-git-plain colored',
+    'github': 'devicon-github-original',
+    'docker': 'devicon-docker-plain colored',
+    'kubernetes': 'devicon-kubernetes-plain colored',
+    'aws': 'devicon-amazonwebservices-plain colored',
+    'gcp': 'devicon-googlecloud-plain colored',
+    'google cloud': 'devicon-googlecloud-plain colored',
+    'azure': 'devicon-azure-plain colored',
+    'linux': 'devicon-linux-plain',
+    'nginx': 'devicon-nginx-original colored',
+    'jest': 'devicon-jest-plain colored',
+    'webpack': 'devicon-webpack-plain colored',
+    'babel': 'devicon-babel-plain colored',
+    'eslint': 'devicon-eslint-original colored',
+    'npm': 'devicon-npm-original-wordmark',
+    'yarn': 'devicon-yarn-plain colored',
+    'pnpm': 'devicon-pnpm-original',
+  };
+  return map[key] ?? null;
+};
+
 const Skills: React.FC = () => {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [skillsByCategory, setSkillsByCategory] = useState<Record<string, Skill[]>>({});
@@ -151,12 +224,26 @@ const Skills: React.FC = () => {
                           className="w-16 h-16 mx-auto rounded-lg shadow-md object-contain p-1"
                         />
                       ) : (
-                        <div
-                          className="w-16 h-16 mx-auto rounded-lg flex items-center justify-center text-white text-2xl font-bold"
-                          style={{ backgroundColor: skill.color }}
-                        >
-                          {skill.name.charAt(0)}
-                        </div>
+                        (() => {
+                          const iconClass = getDeviconClass(skill.name);
+                          if (iconClass) {
+                            return (
+                              <i
+                                className={`${iconClass} text-6xl leading-[4rem] inline-block`}
+                                aria-label={skill.name}
+                                title={skill.name}
+                              />
+                            );
+                          }
+                          return (
+                            <div
+                              className="w-16 h-16 mx-auto rounded-lg flex items-center justify-center text-white text-2xl font-bold"
+                              style={{ backgroundColor: skill.color }}
+                            >
+                              {skill.name.charAt(0)}
+                            </div>
+                          );
+                        })()
                       )}
                     </div>
 
@@ -198,12 +285,26 @@ const Skills: React.FC = () => {
                         className="w-12 h-12 mx-auto mb-2 rounded-lg shadow-md object-contain p-0.5"
                       />
                     ) : (
-                      <div
-                        className="w-12 h-12 mx-auto mb-2 rounded-lg flex items-center justify-center text-white text-lg font-bold transition-all duration-300 group-hover:shadow-lg"
-                        style={{ backgroundColor: skill.color }}
-                      >
-                        {skill.name.charAt(0)}
-                      </div>
+                      (() => {
+                        const iconClass = getDeviconClass(skill.name);
+                        if (iconClass) {
+                          return (
+                            <i
+                              className={`${iconClass} text-4xl leading-[3rem] inline-block`}
+                              aria-label={skill.name}
+                              title={skill.name}
+                            />
+                          );
+                        }
+                        return (
+                          <div
+                            className="w-12 h-12 mx-auto mb-2 rounded-lg flex items-center justify-center text-white text-lg font-bold transition-all duration-300 group-hover:shadow-lg"
+                            style={{ backgroundColor: skill.color }}
+                          >
+                            {skill.name.charAt(0)}
+                          </div>
+                        );
+                      })()
                     )}
                   </motion.div>
                 ))}
