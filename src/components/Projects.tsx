@@ -47,6 +47,21 @@ const Projects: React.FC = () => {
     }
   };
 
+  // Helper to get image URL with proper fallback
+  const getImageUrl = (imagePath: string): string => {
+    if (!imagePath) {
+      return 'https://placehold.co/800x500/111111/AAAAAA?text=Project+Image';
+    }
+    
+    // If already a full URL, return as is
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+      return imagePath;
+    }
+    
+    // Use assetUrl helper to construct proper URL
+    return assetUrl(imagePath);
+  };
+
   if (loading) {
     return (
       <section id="projects" className="py-20 bg-black">
@@ -67,7 +82,7 @@ const Projects: React.FC = () => {
   return (
     <section id="projects" className="py-20 bg-black" ref={ref}>
       <div className="container mx-auto px-4">
-          <motion.div
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
@@ -145,16 +160,18 @@ const Projects: React.FC = () => {
                   className="bg-gray-900 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 group"
                 >
                   {/* Project Image */}
-                  <div className="relative overflow-hidden">
+                  <div className="relative overflow-hidden bg-gray-800">
                     <img
-                      src={assetUrl(project.image)}
+                      src={getImageUrl(project.image)}
                       alt={project.title}
                       loading="lazy"
                       className="w-full h-56 md:h-64 lg:h-72 object-cover object-center group-hover:scale-110 transition-transform duration-500"
                       onError={(e) => {
                         const target = e.currentTarget as HTMLImageElement;
-                        if (target.src.includes('placeholder.co')) return;
-                        target.src = 'https://placehold.co/800x500/111111/AAAAAA?text=Project+Image';
+                        // Only set placeholder if not already a placeholder
+                        if (!target.src.includes('placehold.co')) {
+                          target.src = 'https://placehold.co/800x500/111111/AAAAAA?text=Project+Image';
+                        }
                       }}
                     />
                     
@@ -215,26 +232,28 @@ const Projects: React.FC = () => {
                     </p>
 
                     {/* Technologies */}
-                    <div className="mb-4">
-                      <div className="flex flex-wrap gap-2">
-                        {project.technologies.slice(0, 4).map((tech) => (
-                          <span
-                            key={tech}
-                            className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium"
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                        {project.technologies.length > 4 && (
-                          <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs font-medium">
-                            +{project.technologies.length - 4} more
-                          </span>
-                        )}
+                    {project.technologies && project.technologies.length > 0 && (
+                      <div className="mb-4">
+                        <div className="flex flex-wrap gap-2">
+                          {project.technologies.slice(0, 4).map((tech) => (
+                            <span
+                              key={tech}
+                              className="bg-violet-900/50 text-violet-200 px-2 py-1 rounded-full text-xs font-medium"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                          {project.technologies.length > 4 && (
+                            <span className="bg-gray-700 text-gray-300 px-2 py-1 rounded-full text-xs font-medium">
+                              +{project.technologies.length - 4} more
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    </div>
+                    )}
 
                     {/* Status and Date */}
-                    <div className="flex items-center justify-between text-sm text-gray-400">
+                    <div className="flex items-center justify-between text-sm text-gray-400 mb-4">
                       <div className="flex items-center space-x-2">
                         <Calendar size={16} />
                         <span>
@@ -254,18 +273,20 @@ const Projects: React.FC = () => {
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="mt-6 flex space-x-3">
-                      <motion.a
-                        href={project.demoUrl || '#'}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="flex-1 bg-gradient-to-r from-violet-600 to-green-500 text-white text-center py-2 px-4 rounded-lg font-medium hover:shadow-lg transition-shadow duration-300 flex items-center justify-center space-x-2"
-                      >
-                        <Eye size={16} />
-                        <span>Live Project</span>
-                      </motion.a>
+                    <div className="flex space-x-3">
+                      {project.demoUrl && (
+                        <motion.a
+                          href={project.demoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="flex-1 bg-gradient-to-r from-violet-600 to-green-500 text-white text-center py-2 px-4 rounded-lg font-medium hover:shadow-lg transition-shadow duration-300 flex items-center justify-center space-x-2"
+                        >
+                          <Eye size={16} />
+                          <span>Live Project</span>
+                        </motion.a>
+                      )}
                       {project.githubUrl && (
                         <motion.a
                           href={project.githubUrl}
@@ -297,7 +318,7 @@ const Projects: React.FC = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setActiveFilter('all')}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-full font-medium hover:shadow-lg transition-shadow duration-300"
+                  className="bg-gradient-to-r from-violet-600 to-green-500 text-white px-8 py-3 rounded-full font-medium hover:shadow-lg transition-shadow duration-300"
                 >
                   View All Projects
                 </motion.button>
