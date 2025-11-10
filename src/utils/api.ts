@@ -18,45 +18,9 @@ try {
 
 export const assetUrl = (path: string): string => {
   if (!path) return '';
-  const raw = String(path).trim();
-  if (raw.startsWith('http://') || raw.startsWith('https://')) {
-    try {
-      const url = new URL(raw);
-      // If this is an uploaded asset from a different origin (e.g. localhost), map it to current API origin
-      if (url.pathname.includes('/uploads')) {
-        return `${API_ORIGIN}${url.pathname.replace(/\/+/g, '/')}`;
-      }
-      return raw;
-    } catch {
-      // fall through to normalization path
-    }
-  }
-  
-  // Normalize Windows backslashes and stray API prefixes
-  let fixedPath = raw.replace(/\\/g, '/');
-  fixedPath = fixedPath.replace(/^\/?api\//i, '/');
-
-  // If a filesystem-like path was stored (e.g., C:/.../uploads/xxx.jpg), trim to the uploads segment
-  const uploadsIndex = fixedPath.toLowerCase().indexOf('/uploads/');
-  if (uploadsIndex !== -1) {
-    fixedPath = fixedPath.substring(uploadsIndex + 1); // drop leading slash duplication later
-  }
-
-  // If only a bare filename came through, prefix with uploads/
-  const isBareFilename = !fixedPath.includes('/') && /\.(png|jpe?g|gif|webp|svg|pdf)$/i.test(fixedPath);
-  if (isBareFilename) {
-    fixedPath = `uploads/${fixedPath}`;
-  }
-
-  // Ensure it starts with a single leading slash
-  if (!fixedPath.startsWith('/')) {
-    fixedPath = `/${fixedPath}`;
-  }
-
-  // Collapse duplicate slashes
-  fixedPath = fixedPath.replace(/\/+/g, '/');
-
-  return `${API_ORIGIN}${fixedPath}`;
+  if (path.startsWith('http://') || path.startsWith('https://')) return path;
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  return `${API_ORIGIN}${normalizedPath}`;
 };
 
 // Create axios instance
