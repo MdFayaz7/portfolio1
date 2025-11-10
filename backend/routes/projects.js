@@ -2,8 +2,6 @@ import express from 'express';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { v2 as cloudinary } from 'cloudinary';
-import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import Project from '../models/Project.js';
 import { authenticateToken, requireAdmin } from '../middleware/auth.js';
 import { validateProject } from '../utils/validation.js';
@@ -11,34 +9,16 @@ import { validateProject } from '../utils/validation.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Configure Cloudinary
-if (process.env.CLOUDINARY_CLOUD_NAME) {
-  cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
-  });
-}
-
-// Use Cloudinary in production, local storage in development
-const storage = process.env.NODE_ENV === 'production' && process.env.CLOUDINARY_CLOUD_NAME
-  ? new CloudinaryStorage({
-      cloudinary: cloudinary,
-      params: {
-        folder: 'portfolio/projects',
-        allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
-        transformation: [{ width: 1200, height: 800, crop: 'limit' }]
-      }
-    })
-  : multer.diskStorage({
-      destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '../uploads'));
-      },
-      filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, 'project-' + uniqueSuffix + path.extname(file.originalname));
-      }
-    });
+// Configure multer for project image uploads (local storage)
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, '../uploads'));
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, 'project-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
 
 const upload = multer({
   storage: storage,
