@@ -31,11 +31,34 @@ app.set('trust proxy', 1);
 app.use(helmet());
 
 // CORS configuration
-app.use(cors({
-  origin: true, // Allow all origins for now
-  credentials: true,
-  optionsSuccessStatus: 200
-}));
+const allowedOrigins = [
+  process.env.FRONTEND_URL, // e.g., https://your-frontend.vercel.app
+  'http://localhost:5173',
+  'https://localhost:5173',
+].filter(Boolean);
+
+// Ensure caches/CDNs respect per-origin CORS
+app.use((req, res, next) => {
+  res.header('Vary', 'Origin');
+  next();
+});
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true); // allow non-browser clients
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    optionsSuccessStatus: 204,
+  })
+);
+
+// Handle preflight requests early
+app.options('*', cors());
 
 // Rate limiting
 const limiter = rateLimit({
